@@ -28,5 +28,18 @@ namespace Ecommerce.OrderService.Controllers
 
             return Ok(orders); // returns 200 OK with the list
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(OrderModel order)
+        {
+            order.OrderDate = DateTime.UtcNow;
+
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return Ok("Order created successfully");
+        }
+
     }
 }

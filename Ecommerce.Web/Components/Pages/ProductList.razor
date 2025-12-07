@@ -35,7 +35,7 @@ else
                             <strong>Stock:</strong> @p.Quantity
                         </p>
 
-                        <a class="btn btn-primary mt-auto w-100">
+                        <a href="/cart/@p.Id" class="btn btn-primary mt-auto w-100">
                             Buy Now
                         </a>
                     </div>
@@ -50,6 +50,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("getting products..........///////////////////");
         prducts = await httpClient.GetFromJsonAsync<List<ProductModel>>(
             "https://localhost:7125/api/Product"
         );

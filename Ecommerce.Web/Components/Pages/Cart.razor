@@ -1,0 +1,116 @@
+﻿@page "/cart/{ProductId:int}"
+@rendermode InteractiveServer
+@using Ecommerce.Model
+@inject HttpClient Http
+@inject IJSRuntime JsRuntime
+
+<h3 class="mb-4 text-primary">Your Cart</h3>
+
+@if (loading)
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-3 text-muted">Loading product...</p>
+    </div>
+}
+else if (Product == null)
+{
+    <div class="alert alert-danger mt-4">
+        Unable to load product. Please try again later.
+    </div>
+}
+else
+{
+    <div class="row g-4">
+
+        <!-- LEFT COLUMN: Product Card -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <img src="https://via.placeholder.com/500x300?text=@Product.Name"
+                     class="card-img-top" />
+
+                <div class="card-body">
+                    <h4 class="card-title">@Product.Name</h4>
+                    <p class="card-text mb-1"><strong>Price:</strong> ₹@Product.Price</p>
+                    <p class="card-text"><strong>In Stock:</strong> @Product.Quantity</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: Checkout Form -->
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4">
+                <h4 class="text-secondary mb-3">Order Details</h4>
+
+                <div class="mb-3">
+                    <label class="form-label">Customer Name</label>
+                    <input class="form-control"
+                           placeholder="Enter your name"
+                           @bind="Model.CustomerName" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Quantity</label>
+                    <input type="number"
+                           class="form-control"
+                           style="max-width: 150px"
+                           min="1"
+                           @bind="Model.Quantity" />
+                </div>
+
+                <button class="btn btn-primary w-100" @onclick="CreateOrder">
+                    Place Order
+                </button>
+            </div>
+        </div>
+
+    </div>
+}
+
+@code {
+    [Parameter] public int ProductId { get; set; }
+
+    private OrderModel Model = new();
+    private ProductModel? Product;
+    private bool loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Product = await Http.GetFromJsonAsync<ProductModel>(
+                $"https://localhost:7125/api/product/{ProductId}");
+
+            Model.ProductId = ProductId;
+            Model.Quantity = 1; // default quantity
+        }
+        catch
+        {
+            Product = null;
+        }
+
+        loading = false;
+    }
+
+    private async Task CreateOrder()
+    {
+        if (string.IsNullOrWhiteSpace(Model.CustomerName))
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Please enter your name.");
+            return;
+        }
+
+        var response = await Http.PostAsJsonAsync(
+            "https://localhost:7087/api/order",
+            Model);
+
+        if (response.IsSuccessStatusCode)
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Order placed successfully!");
+        }
+        else
+        {
+            await JsRuntime.InvokeVoidAsync("alert", "Failed to create order.");
+        }
+    }
+}

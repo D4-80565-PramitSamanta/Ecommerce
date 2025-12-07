@@ -28,5 +28,16 @@ namespace Ecommerce.ProductService.Controllers
 
             return Ok(products); // returns 200 OK with the list
         }
+
+        [HttpGet("{id}")]   
+        public async Task<ActionResult<ProductModel>> GetProductById(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound($"Product with ID {id} not found.");
+            }
+            return Ok(product); // returns 200 OK with the product
+        }
     }
 }
