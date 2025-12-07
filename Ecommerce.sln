@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Web", "Ecommerce.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.ProductService", "Ecommerce.ProductService\Ecommerce.ProductService.csproj", "{E39B41A7-8F3B-49AE-8AAF-0EF405594A05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.OroductService", "Ecommerce.OroductService\Ecommerce.OroductService.csproj", "{B07A012A-E8A0-4C7F-A96E-03CB4DAD22AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.OrderService", "Ecommerce.OroductService\Ecommerce.OrderService.csproj", "{B07A012A-E8A0-4C7F-A96E-03CB4DAD22AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ecommerce.Model", "Ecommerce.Model\Ecommerce.Model.csproj", "{B3B8A79A-E899-4A0A-B879-5C2A9B8737DC}"
 EndProject

@@ -1,0 +1,57 @@
+﻿@page "/products"
+@using Ecommerce.Model
+@inject HttpClient httpClient
+
+<h3 class="mb-4 text-primary">Product List</h3>
+
+@if (prducts == null || !prducts.Any())
+{
+    <div class="text-center mt-5">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-3 text-muted">Loading products...</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var p in prducts)
+        {
+            <div class="col-md-4 col-sm-6">
+                <div class="card shadow-sm h-100">
+
+                    <!-- Default placeholder image -->
+                    <img src="https://via.placeholder.com/400x250?text=No+Image"
+                         class="card-img-top rounded-top"
+                         alt="No image">
+
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@p.Name</h5>
+
+                        <p class="card-text mb-1">
+                            <strong>Price:</strong> ₹@p.Price
+                        </p>
+
+                        <p class="card-text mb-3">
+                            <strong>Stock:</strong> @p.Quantity
+                        </p>
+
+                        <a class="btn btn-primary mt-auto w-100">
+                            Buy Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<ProductModel> prducts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        prducts = await httpClient.GetFromJsonAsync<List<ProductModel>>(
+            "https://localhost:7125/api/Product"
+        );
+    }
+}
